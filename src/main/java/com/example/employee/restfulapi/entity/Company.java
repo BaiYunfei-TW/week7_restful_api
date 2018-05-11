@@ -3,6 +3,7 @@ package com.example.employee.restfulapi.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,6 +13,8 @@ public class Company {
     private Long id;
     private String companyName;
     private Integer employeesNumber;
+    @OneToMany(mappedBy = "companyId", cascade = CascadeType.ALL)
+    private List<Employee> employees;
 
     public Company() {
     }
@@ -43,5 +46,13 @@ public class Company {
 
     public void setEmployeesNumber(Integer employeesNumber) {
         this.employeesNumber = employeesNumber;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 }
