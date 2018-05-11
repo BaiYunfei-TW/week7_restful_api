@@ -1,11 +1,13 @@
 package com.example.employee.restfulapi.controller;
 
 import com.example.employee.restfulapi.entity.Company;
+import com.example.employee.restfulapi.entity.Employee;
 import com.example.employee.restfulapi.repository.CompanyRepository;
+import com.example.employee.restfulapi.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,10 +17,46 @@ public class CompanyController {
 
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @GetMapping("")
     public List<Company> getCompanyList() {
         return companyRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Company getCompanyById(@PathVariable("id") Long id) {
+        return companyRepository.getById(id);
+    }
+
+    @GetMapping("/{companyId}/employees")
+    public List<Employee> getEmployeesbyCompanyId(@PathVariable("companyId") Long id) {
+        return employeeRepository.findAllByCompanyId(id);
+    }
+
+    @PostMapping("")
+    public Company addCompany(Company company) {
+        companyRepository.save(company);
+        return company;
+    }
+
+    @PutMapping("/{id}")
+    public Company updateCompany(@RequestBody Company company, @PathVariable Long id) {
+        Company companyToUpdate = companyRepository.getById(id);
+        companyToUpdate.setCompanyName(company.getCompanyName());
+        companyToUpdate.setEmployeesNumber(company.getEmployeesNumber());
+        return companyRepository.save(company);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteCompany(@PathVariable Long id) {
+        try {
+            companyRepository.delete(id);
+        } catch (Exception e) {
+            return "error:" + e.getMessage();
+        }
+        return "success";
     }
 
 }
