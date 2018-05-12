@@ -5,6 +5,8 @@ import com.example.employee.restfulapi.entity.Employee;
 import com.example.employee.restfulapi.repository.CompanyRepository;
 import com.example.employee.restfulapi.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,11 @@ public class CompanyController {
     @GetMapping("/{companyId}/employees")
     public List<Employee> getEmployeesbyCompanyId(@PathVariable("companyId") Long id) {
         return employeeRepository.findAllByCompanyId(id);
+    }
+
+    @GetMapping("/page/{page}/pageSize/{size}")
+    public Page<Company> paginateCompanies(@PathVariable("page") int page, @PathVariable("size") int size) {
+        return companyRepository.findAll(new PageRequest(page, size));
     }
 
     @PostMapping("")

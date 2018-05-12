@@ -2,7 +2,6 @@ package com.example.employee.restfulapi.entity;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class Employee {
@@ -42,7 +41,7 @@ public class Employee {
         this.salary = salary;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
